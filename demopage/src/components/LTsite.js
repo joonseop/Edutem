@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {LanguageTool,Big_button} from './API/LanguageTool';
 
@@ -8,7 +8,10 @@ function LTsite() {
 
   let [languageToolTime, setLanguageToolTime] = useState(0);
   let [resultLanguageTool, setResultLanguageTool] = useState(null);
-  const [loading, setLoading] = useState(false); 
+  useEffect(()=>{
+
+  },[]);
+  var loading="";
 
   const postLanguageTool = () => {
     console.log("postLT");
@@ -29,20 +32,16 @@ function LTsite() {
         setResultLanguageTool(result)
         setLanguageToolTime(result['time'])
     })
-    .then((loading)=>{
-      setLoading('true')
-    })
     .catch(error => {
-        setResultLanguageTool(null)
-        //console.error(error);
-    });
-    setLoading('false')
+      setResultLanguageTool(null)
+      //console.error(error);
+    })
 }
 
 
 const clear = () =>{
-  setLanguageToolTime(0);
   setResultLanguageTool(null);
+  setLanguageToolTime(0);
 }
 
 const postData = async ()  =>{
@@ -53,21 +52,19 @@ const postData = async ()  =>{
 }
 
 await clear();
-setLoading(true);
 try {
+    loading='true';
     postLanguageTool();
 } catch (e) {
     Error(e)
 }finally{
-    setLoading(false);
+   
 }
 }
 
   const cleartext = ()=>{
     document.getElementById("input_text").innerHTML="";
-    document.getElementById("correct_text").innerHTML="";
-    document.getElementById("show_text").innerHTML="";
-    clear();
+    document.getElementById("correct_button").innerHTML="";
   }
 
   const put = () =>{
@@ -99,7 +96,7 @@ try {
         <div id = "text">
           <div className="header">LanguageTool</div>
           <div id="context">
-
+            <Big_button result ={resultLanguageTool}/>
           </div>
         </div>
         <div id="input_text" contentEditable="true"></div>
@@ -113,7 +110,7 @@ try {
       <div id="correct">
         <h3>Correction List</h3>
         <div id="correct_button">
-          <LanguageTool result = {resultLanguageTool} loading = {loading}/>
+          <LanguageTool result = {resultLanguageTool}/>
         </div>
       </div>
     </div>
